@@ -5,8 +5,14 @@ project(QSingleInstanceCheck VERSION 1.0.0 LANGUAGES CXX)
 # Find Qt packages
 find_package(Qt6 REQUIRED COMPONENTS Core Network)
 
-# Header-only library without binaries
+# Create library as a header-only library without binaries
 add_library(QSingleInstanceCheck INTERFACE)
+add_library(QSingleInstanceCheck::QSingleInstanceCheck ALIAS QSingleInstanceCheck)
+
+# Add our .h file here
+target_sources(QSingleInstanceCheck INTERFACE
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/QSingleInstanceCheck/QSingleInstanceCheck.h"
+)
 
 # Include directory
 target_include_directories(QSingleInstanceCheck INTERFACE
