@@ -65,14 +65,14 @@ jobs:
     - name: Generate coverage report
       run: |
         cd build
-        lcov --directory . --capture --output-file coverage.info --ignore-errors inconsistent,format,gcov,unsupported,unused
-        lcov --remove coverage.info '/usr/*' '*/Qt/*' '*/test/*' '*_autogen/*' --output-file coverage.info.cleaned --ignore-errors inconsistent,format,gcov,unsupported,unused
-        lcov --list coverage.info.cleaned --ignore-errors inconsistent,format,gcov,unsupported,unused
+        lcov --directory . --capture --output-file coverage.info --ignore-errors inconsistent,format,gcov,unsupported,unused,mismatch,category
+        lcov --remove coverage.info '/usr/*' '*/Qt/*' '*/tests/*' '*_autogen/*' --output-file coverage.info.cleaned --ignore-errors inconsistent,format,gcov,unsupported,unused,mismatch,category
+        lcov --list coverage.info.cleaned --ignore-errors inconsistent,format,gcov,unsupported,unused,mismatch,category
 
     - name: Generate HTML coverage report
       run: |
         cd build
-        genhtml coverage.info.cleaned --output-directory coverage_html --ignore-errors inconsistent,format,unused
+        genhtml coverage.info.cleaned --output-directory coverage_html --ignore-errors inconsistent,format,unused,mismatch,category
 
     - name: Deploy coverage to GitHub Pages
       if: github.ref == 'refs/heads/main'
