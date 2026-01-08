@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-01-08 00:14:11</td>
+            <td class="headerValue">2026-01-08 23:22:45</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -90,81 +90,127 @@
 <span id="L28"><span class="lineNum">      28</span>              : #include &lt;QLocalServer&gt;</span>
 <span id="L29"><span class="lineNum">      29</span>              : #include &lt;QLocalSocket&gt;</span>
 <span id="L30"><span class="lineNum">      30</span>              : </span>
-<span id="L31"><span class="lineNum">      31</span>              : /**</span>
-<span id="L32"><span class="lineNum">      32</span>              :  * @brief QSingleInstanceCheck can be used to test if your app is already running, or if this</span>
-<span id="L33"><span class="lineNum">      33</span>              :  * instance is the first (or only) one running.</span>
-<span id="L34"><span class="lineNum">      34</span>              :  *</span>
-<span id="L35"><span class="lineNum">      35</span>              :  * Under the hood, it uses shared memory to check if it's the first instance or not, and a local</span>
-<span id="L36"><span class="lineNum">      36</span>              :  * socket (domain socket or named pipe, depending on the platform) to notify the original instance</span>
-<span id="L37"><span class="lineNum">      37</span>              :  * that another one has been started.</span>
-<span id="L38"><span class="lineNum">      38</span>              :  */</span>
-<span id="L39"><span class="lineNum">      39</span>              : class QSingleInstanceCheck : public QObject</span>
-<span id="L40"><span class="lineNum">      40</span>              : {</span>
-<span id="L41"><span class="lineNum">      41</span>              :     Q_OBJECT</span>
-<span id="L42"><span class="lineNum">      42</span>              : public:</span>
-<span id="L43"><span class="lineNum">      43</span>              :     /**</span>
-<span id="L44"><span class="lineNum">      44</span>              :      * @brief QSingleInstanceCheck</span>
-<span id="L45"><span class="lineNum">      45</span>              :      * @param uniqueID Hard code this in your application as this string will identify your</span>
-<span id="L46"><span class="lineNum">      46</span>              :      * instance to others</span>
-<span id="L47"><span class="lineNum">      47</span>              :      * @param parent (Optional) Owner of the object.</span>
-<span id="L48"><span class="lineNum">      48</span>              :      */</span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC tlaBgGNC">           9 :     inline QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr) :</span></span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">           9 :         QObject(parent), uniqueID(uniqueID), isFirst(false)</span></span>
-<span id="L51"><span class="lineNum">      51</span>              :     {</span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">           9 :         QObject::connect(&amp;server, &amp;QLocalServer::newConnection,</span></span>
-<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">           9 :                          this, &amp;QSingleInstanceCheck::notified);</span></span>
-<span id="L54"><span class="lineNum">      54</span>              : </span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           9 :         sharedMemory.setKey(uniqueID);</span></span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           9 :         if (sharedMemory.create(1)) {</span></span>
-<span id="L57"><span class="lineNum">      57</span>              :             // Delete any existing server (for *nix systems) and start our named pipe server.</span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           6 :             server.removeServer(uniqueID);</span></span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           6 :             if (!server.listen(uniqueID)) {</span></span>
-<span id="L60"><span class="lineNum">      60</span> <span class="tlaUNC tlaBgUNC">           0 :                 emit error(&quot;Unable to listen to server: &quot; + server.errorString());</span></span>
-<span id="L61"><span class="lineNum">      61</span>              :             } else {</span>
-<span id="L62"><span class="lineNum">      62</span>              :                 // Shared memory and named pipe server are ready and we're the first instance.</span>
-<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC tlaBgGNC">           6 :                 isFirst = true;</span></span>
-<span id="L64"><span class="lineNum">      64</span>              :             }</span>
-<span id="L65"><span class="lineNum">      65</span>              :         }</span>
-<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           9 :     }</span></span>
-<span id="L67"><span class="lineNum">      67</span>              :     </span>
-<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          18 :     virtual ~QSingleInstanceCheck() = default;</span></span>
-<span id="L69"><span class="lineNum">      69</span>              :     </span>
-<span id="L70"><span class="lineNum">      70</span>              :     /**</span>
-<span id="L71"><span class="lineNum">      71</span>              :      * @return True if another instance is running.</span>
-<span id="L72"><span class="lineNum">      72</span>              :      */</span>
-<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           8 :     inline bool isAlreadyRunning() const { return !isFirst; }</span></span>
-<span id="L74"><span class="lineNum">      74</span>              : </span>
-<span id="L75"><span class="lineNum">      75</span>              :     /**</span>
-<span id="L76"><span class="lineNum">      76</span>              :      * @brief Sends a message to the original instance.</span>
-<span id="L77"><span class="lineNum">      77</span>              :      */</span>
-<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           4 :     inline void notify()</span></span>
-<span id="L79"><span class="lineNum">      79</span>              :     {</span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">           4 :         if (isFirst) {</span></span>
-<span id="L81"><span class="lineNum">      81</span> <span class="tlaUNC tlaBgUNC">           0 :             return;</span></span>
-<span id="L82"><span class="lineNum">      82</span>              :         }</span>
-<span id="L83"><span class="lineNum">      83</span>              : </span>
-<span id="L84"><span class="lineNum">      84</span> <span class="tlaGNC tlaBgGNC">           4 :         QLocalSocket socket;</span></span>
-<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">           4 :         socket.connectToServer(uniqueID);</span></span>
-<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">           4 :     }</span></span>
-<span id="L87"><span class="lineNum">      87</span>              : </span>
-<span id="L88"><span class="lineNum">      88</span>              : signals:</span>
-<span id="L89"><span class="lineNum">      89</span>              : </span>
-<span id="L90"><span class="lineNum">      90</span>              :     /**</span>
-<span id="L91"><span class="lineNum">      91</span>              :      * @brief Fired when a second instance called its notify() method.</span>
-<span id="L92"><span class="lineNum">      92</span>              :      */</span>
-<span id="L93"><span class="lineNum">      93</span>              :     void notified();</span>
-<span id="L94"><span class="lineNum">      94</span>              : </span>
-<span id="L95"><span class="lineNum">      95</span>              :     void error(QString message);</span>
-<span id="L96"><span class="lineNum">      96</span>              :     </span>
-<span id="L97"><span class="lineNum">      97</span>              : private:</span>
-<span id="L98"><span class="lineNum">      98</span>              :     </span>
-<span id="L99"><span class="lineNum">      99</span>              :     QSharedMemory sharedMemory;</span>
-<span id="L100"><span class="lineNum">     100</span>              :     QLocalServer server;</span>
-<span id="L101"><span class="lineNum">     101</span>              :     QString uniqueID;</span>
-<span id="L102"><span class="lineNum">     102</span>              :     bool isFirst;</span>
-<span id="L103"><span class="lineNum">     103</span>              : };</span>
+<span id="L31"><span class="lineNum">      31</span>              : // When running QDoc we have to ignore Q_OBJECT and signals: to generate header-only docs.</span>
+<span id="L32"><span class="lineNum">      32</span>              : #ifdef Q_QDOC</span>
+<span id="L33"><span class="lineNum">      33</span>              : #define Q_OBJECT</span>
+<span id="L34"><span class="lineNum">      34</span>              : #define signals public</span>
+<span id="L35"><span class="lineNum">      35</span>              : #endif</span>
+<span id="L36"><span class="lineNum">      36</span>              : </span>
+<span id="L37"><span class="lineNum">      37</span>              : /*!</span>
+<span id="L38"><span class="lineNum">      38</span>              :     \module QSingleInstanceCheck</span>
+<span id="L39"><span class="lineNum">      39</span>              :     \title QSingleInstanceCheck C++ Classes</span>
+<span id="L40"><span class="lineNum">      40</span>              :     \brief Header-only library for checking if an application is running as a single instance.</span>
+<span id="L41"><span class="lineNum">      41</span>              : */</span>
+<span id="L42"><span class="lineNum">      42</span>              : </span>
+<span id="L43"><span class="lineNum">      43</span>              : /*!</span>
+<span id="L44"><span class="lineNum">      44</span>              :     \class QSingleInstanceCheck</span>
+<span id="L45"><span class="lineNum">      45</span>              :     \inmodule QSingleInstanceCheck</span>
+<span id="L46"><span class="lineNum">      46</span>              : </span>
+<span id="L47"><span class="lineNum">      47</span>              :     The QSingleInstanceCheck class can be used to test if your app is already running, or if this</span>
+<span id="L48"><span class="lineNum">      48</span>              :     instance is the first (or only) one running.</span>
+<span id="L49"><span class="lineNum">      49</span>              : </span>
+<span id="L50"><span class="lineNum">      50</span>              :     This library consists of a header only.</span>
+<span id="L51"><span class="lineNum">      51</span>              : </span>
+<span id="L52"><span class="lineNum">      52</span>              :     Under the hood, QSingleInstanceCheck uses shared memory to check if it's the first instance or</span>
+<span id="L53"><span class="lineNum">      53</span>              :     not, and a local socket (domain socket or named pipe, depending on the platform) to notify the</span>
+<span id="L54"><span class="lineNum">      54</span>              :     original instance that another one has been started.</span>
+<span id="L55"><span class="lineNum">      55</span>              : */</span>
+<span id="L56"><span class="lineNum">      56</span>              : class QSingleInstanceCheck : public QObject</span>
+<span id="L57"><span class="lineNum">      57</span>              : {</span>
+<span id="L58"><span class="lineNum">      58</span>              :     Q_OBJECT</span>
+<span id="L59"><span class="lineNum">      59</span>              : </span>
+<span id="L60"><span class="lineNum">      60</span>              : public:</span>
+<span id="L61"><span class="lineNum">      61</span>              :     /*!</span>
+<span id="L62"><span class="lineNum">      62</span>              :         \fn inline QSingleInstanceCheck::QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr)</span>
+<span id="L63"><span class="lineNum">      63</span>              : </span>
+<span id="L64"><span class="lineNum">      64</span>              :         QConstructs a SingleInstanceCheck</span>
+<span id="L65"><span class="lineNum">      65</span>              : </span>
+<span id="L66"><span class="lineNum">      66</span>              :         All instances must use the same \a uniqueID to differentiate themselves from other</span>
+<span id="L67"><span class="lineNum">      67</span>              :         applications. Hard code this in your application. It is recommended not to use special</span>
+<span id="L68"><span class="lineNum">      68</span>              :         characters for maximum compatibility.</span>
+<span id="L69"><span class="lineNum">      69</span>              : </span>
+<span id="L70"><span class="lineNum">      70</span>              :         Optionally, the \a parent is the owner of the object.</span>
+<span id="L71"><span class="lineNum">      71</span>              :      */</span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC tlaBgGNC">           9 :     inline QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr) :</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           9 :         QObject(parent), uniqueID(uniqueID), isFirst(false)</span></span>
+<span id="L74"><span class="lineNum">      74</span>              :     {</span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           9 :         QObject::connect(&amp;server, &amp;QLocalServer::newConnection,</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           9 :                          this, &amp;QSingleInstanceCheck::notified);</span></span>
+<span id="L77"><span class="lineNum">      77</span>              : </span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           9 :         sharedMemory.setKey(uniqueID);</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           9 :         if (sharedMemory.create(1)) {</span></span>
+<span id="L80"><span class="lineNum">      80</span>              :             // Delete any existing server (for *nix systems) and start our named pipe server.</span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">           6 :             server.removeServer(uniqueID);</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">           6 :             if (!server.listen(uniqueID)) {</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaUNC tlaBgUNC">           0 :                 emit error(&quot;Unable to listen to server: &quot; + server.errorString());</span></span>
+<span id="L84"><span class="lineNum">      84</span>              :             } else {</span>
+<span id="L85"><span class="lineNum">      85</span>              :                 // Shared memory and named pipe server are ready and we're the first instance.</span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC tlaBgGNC">           6 :                 isFirst = true;</span></span>
+<span id="L87"><span class="lineNum">      87</span>              :             }</span>
+<span id="L88"><span class="lineNum">      88</span>              :         }</span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">           9 :     }</span></span>
+<span id="L90"><span class="lineNum">      90</span>              :     </span>
+<span id="L91"><span class="lineNum">      91</span>              :     /*!</span>
+<span id="L92"><span class="lineNum">      92</span>              :         \fn virtual QSingleInstanceCheck::~QSingleInstanceCheck()</span>
+<span id="L93"><span class="lineNum">      93</span>              : </span>
+<span id="L94"><span class="lineNum">      94</span>              :         Default deconstructor.</span>
+<span id="L95"><span class="lineNum">      95</span>              :      */</span>
+<span id="L96"><span class="lineNum">      96</span> <span class="tlaGNC">          18 :     virtual ~QSingleInstanceCheck() = default;</span></span>
+<span id="L97"><span class="lineNum">      97</span>              :     </span>
+<span id="L98"><span class="lineNum">      98</span>              :     /*!</span>
+<span id="L99"><span class="lineNum">      99</span>              :        \fn inline bool QSingleInstanceCheck::isAlreadyRunning() const</span>
+<span id="L100"><span class="lineNum">     100</span>              : </span>
+<span id="L101"><span class="lineNum">     101</span>              :        Returns \c true if another instance is running.</span>
+<span id="L102"><span class="lineNum">     102</span>              :      */</span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">           8 :     inline bool isAlreadyRunning() const { return !isFirst; }</span></span>
 <span id="L104"><span class="lineNum">     104</span>              : </span>
-<span id="L105"><span class="lineNum">     105</span>              : #endif // QSINGLEINSTANCECHECK_H</span>
+<span id="L105"><span class="lineNum">     105</span>              :     /*!</span>
+<span id="L106"><span class="lineNum">     106</span>              :         \fn inline void QSingleInstanceCheck::notify()</span>
+<span id="L107"><span class="lineNum">     107</span>              : </span>
+<span id="L108"><span class="lineNum">     108</span>              :         Sends a notification to the original instance. If this is the original instance, it's</span>
+<span id="L109"><span class="lineNum">     109</span>              :         a no-op.</span>
+<span id="L110"><span class="lineNum">     110</span>              : </span>
+<span id="L111"><span class="lineNum">     111</span>              :         \sa notified()</span>
+<span id="L112"><span class="lineNum">     112</span>              :      */</span>
+<span id="L113"><span class="lineNum">     113</span> <span class="tlaGNC">           4 :     inline void notify()</span></span>
+<span id="L114"><span class="lineNum">     114</span>              :     {</span>
+<span id="L115"><span class="lineNum">     115</span> <span class="tlaGNC">           4 :         if (isFirst) {</span></span>
+<span id="L116"><span class="lineNum">     116</span> <span class="tlaUNC tlaBgUNC">           0 :             return;</span></span>
+<span id="L117"><span class="lineNum">     117</span>              :         }</span>
+<span id="L118"><span class="lineNum">     118</span>              : </span>
+<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC tlaBgGNC">           4 :         QLocalSocket socket;</span></span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaGNC">           4 :         socket.connectToServer(uniqueID);</span></span>
+<span id="L121"><span class="lineNum">     121</span> <span class="tlaGNC">           4 :     }</span></span>
+<span id="L122"><span class="lineNum">     122</span>              : </span>
+<span id="L123"><span class="lineNum">     123</span>              : signals:</span>
+<span id="L124"><span class="lineNum">     124</span>              : </span>
+<span id="L125"><span class="lineNum">     125</span>              :     /*!</span>
+<span id="L126"><span class="lineNum">     126</span>              :         \fn void QSingleInstanceCheck::notified()</span>
+<span id="L127"><span class="lineNum">     127</span>              : </span>
+<span id="L128"><span class="lineNum">     128</span>              :         This signal is emitted in the main instance when a subsequent instance called its</span>
+<span id="L129"><span class="lineNum">     129</span>              :         notify() method.</span>
+<span id="L130"><span class="lineNum">     130</span>              : </span>
+<span id="L131"><span class="lineNum">     131</span>              :         \sa notify()</span>
+<span id="L132"><span class="lineNum">     132</span>              :      */</span>
+<span id="L133"><span class="lineNum">     133</span>              :     void notified();</span>
+<span id="L134"><span class="lineNum">     134</span>              : </span>
+<span id="L135"><span class="lineNum">     135</span>              :     /*!</span>
+<span id="L136"><span class="lineNum">     136</span>              :         \fn void QSingleInstanceCheck::error(QString message)</span>
+<span id="L137"><span class="lineNum">     137</span>              : </span>
+<span id="L138"><span class="lineNum">     138</span>              :         The error signal is emitted when the local server or failed memory failed to</span>
+<span id="L139"><span class="lineNum">     139</span>              :         initialize. The \a message provides details on what went wrong.</span>
+<span id="L140"><span class="lineNum">     140</span>              :      */</span>
+<span id="L141"><span class="lineNum">     141</span>              :     void error(QString message);</span>
+<span id="L142"><span class="lineNum">     142</span>              :     </span>
+<span id="L143"><span class="lineNum">     143</span>              : private:</span>
+<span id="L144"><span class="lineNum">     144</span>              :     </span>
+<span id="L145"><span class="lineNum">     145</span>              :     QSharedMemory sharedMemory;</span>
+<span id="L146"><span class="lineNum">     146</span>              :     QLocalServer server;</span>
+<span id="L147"><span class="lineNum">     147</span>              :     QString uniqueID;</span>
+<span id="L148"><span class="lineNum">     148</span>              :     bool isFirst;</span>
+<span id="L149"><span class="lineNum">     149</span>              : };</span>
+<span id="L150"><span class="lineNum">     150</span>              : </span>
+<span id="L151"><span class="lineNum">     151</span>              : #endif // QSINGLEINSTANCECHECK_H</span>
         </pre>
               </td>
             </tr>
