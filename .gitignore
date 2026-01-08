@@ -4,6 +4,9 @@
 # Default build folder
 build
 
+# Documentation folder
+doc
+
 # C++ objects and libs
 *.slo
 *.lo

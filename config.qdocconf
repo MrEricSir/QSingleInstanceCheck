@@ -1,0 +1,27 @@
+project = QSingleInstanceCheck
+module = QSingleInstanceCheck
+version = 1.0.0
+
+# Where to find the source code, which in our case is just a header.
+headerdirs = ./include 
+sourcedirs = ./include
+
+# Needed for header-only library.
+documentationinheaders = true
+moduleheader = QSingleInstanceCheck.h
+
+# Dependencies.
+depends = qtcore qtnetwork 
+
+# Include the paths needed to generate the docs.
+outputdir = ./doc/html
+outputformats = HTML
+
+# Use offline styling for HTML.
+#
+# If the environment variable isn't set you can do so in the terminal, for example:
+#     export QT_INSTALL_DOCS=~Qt/6.10.0/macos/doc/
+HTML.stylesheets = $QT_INSTALL_DOCS/global/template/style/offline.css 
+HTML.headerstyles = " \
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"style/offline.css\" /> \
+"

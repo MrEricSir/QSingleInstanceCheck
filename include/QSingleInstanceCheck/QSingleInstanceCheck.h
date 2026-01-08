@@ -28,23 +28,46 @@
 #include <QLocalServer>
 #include <QLocalSocket>
 
-/**
- * @brief QSingleInstanceCheck can be used to test if your app is already running, or if this
- * instance is the first (or only) one running.
- *
- * Under the hood, it uses shared memory to check if it's the first instance or not, and a local
- * socket (domain socket or named pipe, depending on the platform) to notify the original instance
- * that another one has been started.
- */
+// When running QDoc we have to ignore Q_OBJECT and signals: to generate header-only docs.
+#ifdef Q_QDOC
+#define Q_OBJECT
+#define signals public
+#endif
+
+/*!
+    \module QSingleInstanceCheck
+    \title QSingleInstanceCheck C++ Classes
+    \brief Header-only library for checking if an application is running as a single instance.
+*/
+
+/*!
+    \class QSingleInstanceCheck
+    \inmodule QSingleInstanceCheck
+
+    The QSingleInstanceCheck class can be used to test if your app is already running, or if this
+    instance is the first (or only) one running.
+
+    This library consists of a header only.
+
+    Under the hood, QSingleInstanceCheck uses shared memory to check if it's the first instance or
+    not, and a local socket (domain socket or named pipe, depending on the platform) to notify the
+    original instance that another one has been started.
+*/
 class QSingleInstanceCheck : public QObject
 {
     Q_OBJECT
+
 public:
-    /**
-     * @brief QSingleInstanceCheck
-     * @param uniqueID Hard code this in your application as this string will identify your
-     * instance to others
-     * @param parent (Optional) Owner of the object.
+    /*!
+        \fn inline QSingleInstanceCheck::QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr)
+
+        QConstructs a SingleInstanceCheck
+
+        All instances must use the same \a uniqueID to differentiate themselves from other
+        applications. Hard code this in your application. It is recommended not to use special
+        characters for maximum compatibility.
+
+        Optionally, the \a parent is the owner of the object.
      */
     inline QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr) :
         QObject(parent), uniqueID(uniqueID), isFirst(false)
@@ -65,15 +88,27 @@ public:
         }
     }
     
+    /*!
+        \fn virtual QSingleInstanceCheck::~QSingleInstanceCheck()
+
+        Default deconstructor.
+     */
     virtual ~QSingleInstanceCheck() = default;
     
-    /**
-     * @return True if another instance is running.
+    /*!
+       \fn inline bool QSingleInstanceCheck::isAlreadyRunning() const
+
+       Returns \c true if another instance is running.
      */
     inline bool isAlreadyRunning() const { return !isFirst; }
 
-    /**
-     * @brief Sends a message to the original instance.
+    /*!
+        \fn inline void QSingleInstanceCheck::notify()
+
+        Sends a notification to the original instance. If this is the original instance, it's
+        a no-op.
+
+        \sa notified()
      */
     inline void notify()
     {
@@ -87,11 +122,22 @@ public:
 
 signals:
 
-    /**
-     * @brief Fired when a second instance called its notify() method.
+    /*!
+        \fn void QSingleInstanceCheck::notified()
+
+        This signal is emitted in the main instance when a subsequent instance called its
+        notify() method.
+
+        \sa notify()
      */
     void notified();
 
+    /*!
+        \fn void QSingleInstanceCheck::error(QString message)
+
+        The error signal is emitted when the local server or failed memory failed to
+        initialize. The \a message provides details on what went wrong.
+     */
     void error(QString message);
     
 private:

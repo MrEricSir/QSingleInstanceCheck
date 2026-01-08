@@ -133,3 +133,13 @@ if(ENABLE_COVERAGE)
         message(WARNING "Coverage only supported with GCC or Clang")
     endif()
 endif()
+
+# Documentation
+find_program(QDOC_EXE qdoc)
+if(QDOC_EXE)
+    add_custom_target(docs
+        COMMAND ${QDOC_EXE} ${CMAKE_CURRENT_SOURCE_DIR}/config.qdocconf
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Running QDoc to generate documentation"
+    )
+endif()

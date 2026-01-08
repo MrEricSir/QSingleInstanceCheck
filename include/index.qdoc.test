@@ -1,0 +1,13 @@
+/*!
+    \page index.html
+    \title QSingleInstanceCheck Overview
+
+    This library provides a simple way to ensure only one instance of your
+    Qt application is running at a time.
+
+    \section1 Classes
+    \list
+        \li \l {QSingleInstanceCheck}
+    \endlist
+*/
+
