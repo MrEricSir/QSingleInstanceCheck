@@ -3,6 +3,7 @@
 # QSingleInstanceCheck
 
 [![Unit Tests](https://github.com/MrEricSir/QSingleInstanceCheck/workflows/Test/badge.svg)](https://github.com/MrEricSir/QSingleInstanceCheck/actions)
+[![Coverage Report](https://img.shields.io/badge/coverage-report-blue.svg)](https://mrericsir.github.io/QSingleInstanceCheck/coverage/)
 
 QSingleInstanceCheck can be used to test if your Qt app is already running, or if this instance is 
 the second (or nth) instance. Cross-platform for Windows, macOS, and Linux.
