@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<!-- QSingleInstanceCheck.h -->
+  <title>QSingleInstanceCheck Class | QSingleInstanceCheck 1.0.0</title>
+     <link rel="stylesheet" type="text/css" href="style/offline.css" /> </head>
+<body>
+<li><a href="qsingleinstancecheck-module.html" translate="no">QSingleInstanceCheck</a></li>
+<li>QSingleInstanceCheck</li>
+<div class="sidebar">
+<div class="toc">
+<h3 id="toc">Contents</h3>
+<ul>
+<li class="level1"><a href="#public-functions">Public Functions</a></li>
+<li class="level1"><a href="#details">Detailed Description</a></li>
+</ul>
+</div>
+<div class="sidebar-content" id="sidebar-content"></div></div>
+<h1 class="title" translate="no">QSingleInstanceCheck Class</h1>
+<div class="table"><table class="alignedsummary requisites" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> Header:</td><td class="memItemRight bottomAlign"> <code translate="no">#include &lt;QSingleInstanceCheck&gt;</code></td></tr>
+</table></div>
+<ul>
+<li><a href="qsingleinstancecheck-members.html">List of all members, including inherited members</a></li>
+</ul>
+<h2 id="public-functions">Public Functions</h2>
+<div class="table"><table class="alignedsummary" translate="no">
+<tr><td class="memItemLeft rightAlign topAlign"> </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#QSingleInstanceCheck" translate="no">QSingleInstanceCheck</a></b>(const int <i>uniqueID</i>, int *<i>parent</i> = nullptr)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#dtor.QSingleInstanceCheck" translate="no">~QSingleInstanceCheck</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#error" translate="no">error</a></b>(int <i>message</i>)</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#isAlreadyRunning" translate="no">isAlreadyRunning</a></b>() const</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notified" translate="no">notified</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notify" translate="no">notify</a></b>()</td></tr>
+</table></div>
+<!-- $$$QSingleInstanceCheck-description -->
+<div class="descr">
+<h2 id="details">Detailed Description</h2>
+<p>The QSingleInstanceCheck class can be used to test if your app is already running, or if this instance is the first (or only) one running.</p>
+<p>This library consists of a header only.</p>
+<p>Under the hood, QSingleInstanceCheck uses shared memory to check if it's the first instance or not, and a local socket (domain socket or named pipe, depending on the platform) to notify the original instance that another one has been started.</p>
+</div>
+<!-- @@@QSingleInstanceCheck -->
+<div class="func">
+<h2>Member Function Documentation</h2>
+<!-- $$$QSingleInstanceCheck[overload1]$$$QSingleInstanceCheckconstintint* -->
+<h3 class="fn" translate="no" id="QSingleInstanceCheck">QSingleInstanceCheck::<span class="name">QSingleInstanceCheck</span>(const <span class="type">int</span> <i>uniqueID</i>, <span class="type">int</span> *<i>parent</i> = nullptr)</h3>
+<p>QConstructs a SingleInstanceCheck</p>
+<p>All instances must use the same <i translate="no">uniqueID</i> to differentiate themselves from other applications. Hard code this in your application. It is recommended not to use special characters for maximum compatibility.</p>
+<p>Optionally, the <i translate="no">parent</i> is the owner of the object.</p>
+<!-- @@@QSingleInstanceCheck -->
+<!-- $$$~QSingleInstanceCheck[overload1]$$$~QSingleInstanceCheck -->
+<h3 class="fn" translate="no" id="dtor.QSingleInstanceCheck"><code class="details extra" translate="no">[virtual constexpr noexcept]</code> QSingleInstanceCheck::<span class="name">~QSingleInstanceCheck</span>()</h3>
+<p>Default deconstructor.</p>
+<!-- @@@~QSingleInstanceCheck -->
+<!-- $$$error[overload1]$$$errorint -->
+<h3 class="fn" translate="no" id="error"><span class="type">void</span> QSingleInstanceCheck::<span class="name">error</span>(<span class="type">int</span> <i>message</i>)</h3>
+<p>The error signal is emitted when the local server or failed memory failed to initialize. The <i translate="no">message</i> provides details on what went wrong.</p>
+<!-- @@@error -->
+<!-- $$$isAlreadyRunning[overload1]$$$isAlreadyRunning -->
+<h3 class="fn" translate="no" id="isAlreadyRunning"><span class="type">bool</span> QSingleInstanceCheck::<span class="name">isAlreadyRunning</span>() const</h3>
+<p>Returns <code translate="no">true</code> if another instance is running.</p>
+<!-- @@@isAlreadyRunning -->
+<!-- $$$notified[overload1]$$$notified -->
+<h3 class="fn" translate="no" id="notified"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notified</span>()</h3>
+<p>This signal is emitted in the main instance when a subsequent instance called its <a href="qsingleinstancecheck.html#notify" translate="no">notify</a>() method.</p>
+<p><b>See also </b><a href="qsingleinstancecheck.html#notify" translate="no">notify</a>().</p>
+<!-- @@@notified -->
+<!-- $$$notify[overload1]$$$notify -->
+<h3 class="fn" translate="no" id="notify"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notify</span>()</h3>
+<p>Sends a notification to the original instance. If this is the original instance, it's a no-op.</p>
+<p><b>See also </b><a href="qsingleinstancecheck.html#notified" translate="no">notified</a>().</p>
+<!-- @@@notify -->
+</div>
+</body>
+</html>

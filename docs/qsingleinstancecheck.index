@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE QDOCINDEX>
+<INDEX url="" title="QSingleInstanceCheck Reference Documentation" version="1.0.0" project="QSingleInstanceCheck">
+    <namespace name="" status="active" access="public" module="qsingleinstancecheck">
+        <class name="QSingleInstanceCheck" href="qsingleinstancecheck.html" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="56" documented="true" module="QSingleInstanceCheck">
+            <function name="QSingleInstanceCheck" fullname="QSingleInstanceCheck::QSingleInstanceCheck" href="qsingleinstancecheck.html#QSingleInstanceCheck" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="72" documented="true" meta="constructor" signature="QSingleInstanceCheck(const int uniqueID, int *parent)">
+                <parameter type="const int" name="uniqueID" default=""/>
+                <parameter type="int *" name="parent" default="nullptr"/>
+            </function>
+            <function name="error" fullname="QSingleInstanceCheck::error" href="qsingleinstancecheck.html#error" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="141" documented="true" meta="plain" type="void" signature="void error(int message)">
+                <parameter type="int" name="message" default=""/>
+            </function>
+            <function name="isAlreadyRunning" fullname="QSingleInstanceCheck::isAlreadyRunning" href="qsingleinstancecheck.html#isAlreadyRunning" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="103" documented="true" meta="plain" const="true" type="bool" signature="bool isAlreadyRunning() const"/>
+            <function name="notified" fullname="QSingleInstanceCheck::notified" href="qsingleinstancecheck.html#notified" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="133" documented="true" meta="plain" type="void" signature="void notified()"/>
+            <function name="notify" fullname="QSingleInstanceCheck::notify" href="qsingleinstancecheck.html#notify" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="113" documented="true" meta="plain" type="void" signature="void notify()"/>
+            <function name="~QSingleInstanceCheck" fullname="QSingleInstanceCheck::~QSingleInstanceCheck" href="qsingleinstancecheck.html#dtor.QSingleInstanceCheck" status="active" access="public" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="96" documented="true" meta="destructor" virtual="virtual" constexpr="true" noexcept="true" signature="~QSingleInstanceCheck()"/>
+        </class>
+        <module name="QSingleInstanceCheck" href="qsingleinstancecheck-module.html" status="active" location="QSingleInstanceCheck.h" filepath="/home/runner/work/QSingleInstanceCheck/QSingleInstanceCheck/include/QSingleInstanceCheck/QSingleInstanceCheck.h" lineno="37" documented="true" seen="true" title="QSingleInstanceCheck C++ Classes" brief="Header-only library for checking if an application is running as a single instance"/>
+    </namespace>
+</INDEX>
