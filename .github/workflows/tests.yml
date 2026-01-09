@@ -83,3 +83,31 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build/coverage_html
         destination_dir: coverage
+
+  documentation:
+    name: QDoc
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.10.1'
+        cache: true
+
+    - name: Generate Documentation
+      run: |
+        qdoc config.qdocconf --debug
+
+    - name: Deploy docs to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        [cite_start]publish_dir: ./doc/html # This matches the outputdir in your config 
+        destination_dir: docs
