@@ -102,7 +102,11 @@ jobs:
 
     - name: Generate Documentation
       run: |
+        export QT_INSTALL_HEADERS=$QT_DIR/include
+        export QT_INSTALL_DOCS=$QT_DIR/doc
         qdoc config.qdocconf --debug
+      env:
+        QT_DIR: ${{ env.Qt6_DIR }}
 
     - name: Deploy docs to GitHub Pages
       if: github.ref == 'refs/heads/main'
