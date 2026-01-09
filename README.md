@@ -53,6 +53,13 @@ void MyApp::onSecondInstance()
 In your code you may wish to respond to the `notified()` signal to show the window, open a dialog box, etc.
 That part is entirely up to you and will depend on your use case.
 
+## Documentation
+
+Full documentation [is available here.](https://mrericsir.github.io/QSingleInstanceCheck/docs/qsingleinstancecheck.html)
+
+***Important note:*** QDoc is not designed for header-only libraries; be aware that signals will appear as methods
+in the documentation as a result.
+
 ## How To Include
 
 There are two option to include this in your project:
