@@ -109,5 +109,5 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        [cite_start]publish_dir: ./doc/html # This matches the outputdir in your config 
+        publish_dir: ./doc/html 
         destination_dir: docs
