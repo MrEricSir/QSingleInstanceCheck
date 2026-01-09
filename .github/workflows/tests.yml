@@ -102,8 +102,14 @@ jobs:
 
     - name: Generate Documentation
       run: |
+        # Setup.
         export QT_INSTALL_HEADERS=$QT_DIR/include
         export QT_INSTALL_DOCS=$QT_DIR/doc
+        echo $QT_DIR
+        echo $QT_INSTALL_HEADERS
+        echo $QT_INSTALL_DOCS
+
+        # Generate the doc!
         qdoc config.qdocconf --debug
       env:
         QT_DIR: ${{ env.Qt6_DIR }}
