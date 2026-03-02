@@ -25,7 +25,7 @@ notify the main instance.
 
 We'll assume your project name is `MyApp` for the purpose of this example.
 
-````cpp
+```cpp
 #include "QSingleInstanceCheck.h"
 
 // Somewhere in your application startup code...
@@ -48,10 +48,13 @@ void MyApp::onSecondInstance()
 {
   qDebug() << "Another instance started!";
 }
-````
+```
 
 In your code you may wish to respond to the `notified()` signal to show the window, open a dialog box, etc.
 That part is entirely up to you and will depend on your use case.
+
+If you wish to pass command line arguments or other strings, `notify()` takes an optional string list which 
+will be received by `notified()` 
 
 ## Documentation
 
@@ -82,18 +85,18 @@ directory called `external/QSingleInstanceCheck`.
 
 In the root directory of your project:
 
-````bash
+```bash
 git submodule add git@github.com:MrEricSir/QSingleInstanceCheck.git external/QSingleInstanceCheck
 git add .gitmodules
 git commit -m "Add QSingleInstanceCheck submodule"
-````
+```
 
 ***Note:*** You can then update the header file just as you would with any other submodule. In addition you can 
 use the unit tests in your project if you feel so inclined. Both of these are beyond the scope of this document.
 
 Assuming you're using `CMake` to build your project, modify your CMakeLists.txt file
 
-````cmake
+```cmake
 # Add QSingleInstanceCheck directory
 add_subdirectory(external/QSingleInstanceCheck)
 
@@ -102,13 +105,13 @@ target_link_libraries(MyApp PRIVATE
   QSingleInstanceCheck
   # ...etc.
 )
-````
+```
 
 With this approach, you can include the header in your C++ code with:
 
-````cpp
+```cpp
 include <QSingleInstanceCheck/QSingleInstanceCheck.h>
-````
+```
 
 ## Contributing
 

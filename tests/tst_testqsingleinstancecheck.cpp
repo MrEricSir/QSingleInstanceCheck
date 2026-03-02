@@ -19,6 +19,7 @@ private slots:
     void testFirstInstance();
     void testSecondInstance();
     void testNotifyFromSecondInstance();
+    void testNotifyWithArguments();
     void testUniqueIDsIndependent();
     void testMultipleNotifications();
 
@@ -85,12 +86,39 @@ void TestQSingleInstanceCheck::testNotifyFromSecondInstance()
     QSingleInstanceCheck* second = new QSingleInstanceCheck(id);
     QVERIFY(second->isAlreadyRunning());
 
-    // Notify from second instance
+    // Notify from second instance (no arguments)
     second->notify();
 
-    // First instance should receive the notification
+    // First instance should receive the notification with an empty argument list
     QVERIFY(spy.wait(5000));
     QCOMPARE(spy.count(), 1);
+    QVERIFY(spy.at(0).at(0).toStringList().isEmpty());
+
+    delete second;
+    delete first;
+}
+
+// Test that notify() with arguments delivers those arguments to the first instance
+void TestQSingleInstanceCheck::testNotifyWithArguments()
+{
+    QString id = generateUniqueID();
+    QSingleInstanceCheck* first = new QSingleInstanceCheck(id);
+    QSignalSpy spy(first, &QSingleInstanceCheck::notified);
+
+    QVERIFY(!first->isAlreadyRunning());
+
+    QSingleInstanceCheck* second = new QSingleInstanceCheck(id);
+    QVERIFY(second->isAlreadyRunning());
+
+    // Notify with arguments
+    QStringList args = {"feed://example.com/rss", "--background"};
+    second->notify(args);
+
+    QVERIFY(spy.wait(5000));
+    QCOMPARE(spy.count(), 1);
+
+    QStringList received = spy.at(0).at(0).toStringList();
+    QCOMPARE(received, args);
 
     delete second;
     delete first;

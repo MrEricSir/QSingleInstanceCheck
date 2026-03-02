@@ -25,8 +25,10 @@
 
 #include <QSharedMemory>
 #include <QString>
+#include <QStringList>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QDataStream>
 
 // When running QDoc we have to ignore Q_OBJECT and signals: to generate header-only docs.
 #ifdef Q_QDOC
@@ -72,8 +74,27 @@ public:
     inline QSingleInstanceCheck(const QString uniqueID, QObject* parent = nullptr) :
         QObject(parent), uniqueID(uniqueID), isFirst(false)
     {
-        QObject::connect(&server, &QLocalServer::newConnection,
-                         this, &QSingleInstanceCheck::notified);
+        connect(&server, &QLocalServer::newConnection, this, [this]() {
+            QLocalSocket* client = server.nextPendingConnection();
+            if (!client) return;
+
+            // Buffer incoming data until the client disconnects.
+            auto buffer = new QByteArray();
+            connect(client, &QLocalSocket::readyRead, this, [client, buffer]() {
+                buffer->append(client->readAll());
+            });
+
+            connect(client, &QLocalSocket::disconnected, this, [this, client, buffer]() {
+                QStringList args;
+                if (!buffer->isEmpty()) {
+                    QDataStream stream(*buffer);
+                    stream >> args;
+                }
+                emit notified(args);
+                delete buffer;
+                client->deleteLater();
+            });
+        });
 
         sharedMemory.setKey(uniqueID);
         if (sharedMemory.create(1)) {
@@ -103,14 +124,14 @@ public:
     inline bool isAlreadyRunning() const { return !isFirst; }
 
     /*!
-        \fn inline void QSingleInstanceCheck::notify()
+        \fn inline void QSingleInstanceCheck::notify(const QStringList& arguments = {})
 
-        Sends a notification to the original instance. If this is the original instance, it's
-        a no-op.
+        Sends a notification to the original instance, optionally with a list of \a arguments.
+        If this is the original instance, it's a no-op.
 
         \sa notified()
      */
-    inline void notify()
+    inline void notify(const QStringList& arguments = {})
     {
         if (isFirst) {
             return;
@@ -118,19 +139,29 @@ public:
 
         QLocalSocket socket;
         socket.connectToServer(uniqueID);
+        if (!arguments.isEmpty() && socket.waitForConnected(1000)) {
+            QByteArray block;
+            QDataStream stream(&block, QIODevice::WriteOnly);
+            stream << arguments;
+            socket.write(block);
+            socket.flush();
+            socket.waitForBytesWritten(1000);
+            socket.disconnectFromServer();
+        }
     }
 
 signals:
 
     /*!
-        \fn void QSingleInstanceCheck::notified()
+        \fn void QSingleInstanceCheck::notified(const QStringList& arguments)
 
         This signal is emitted in the main instance when a subsequent instance called its
-        notify() method.
+        notify() method. The \a arguments contain the strings passed by the second instance,
+        or an empty list if notify() was called without arguments.
 
         \sa notify()
      */
-    void notified();
+    void notified(const QStringList& arguments = {});
 
     /*!
         \fn void QSingleInstanceCheck::error(QString message)
