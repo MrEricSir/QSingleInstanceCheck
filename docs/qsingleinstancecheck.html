@@ -30,8 +30,8 @@
 <tr><td class="memItemLeft rightAlign topAlign"> virtual </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#dtor.QSingleInstanceCheck" translate="no">~QSingleInstanceCheck</a></b>()</td></tr>
 <tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#error" translate="no">error</a></b>(int <i>message</i>)</td></tr>
 <tr><td class="memItemLeft rightAlign topAlign"> bool </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#isAlreadyRunning" translate="no">isAlreadyRunning</a></b>() const</td></tr>
-<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notified" translate="no">notified</a></b>()</td></tr>
-<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notify" translate="no">notify</a></b>()</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notified" translate="no">notified</a></b>(const int &amp;<i>arguments</i> = {})</td></tr>
+<tr><td class="memItemLeft rightAlign topAlign"> void </td><td class="memItemRight bottomAlign"><b><a href="qsingleinstancecheck.html#notify" translate="no">notify</a></b>(const int &amp;<i>arguments</i> = {})</td></tr>
 </table></div>
 <!-- $$$QSingleInstanceCheck-description -->
 <div class="descr">
@@ -61,14 +61,14 @@
 <h3 class="fn" translate="no" id="isAlreadyRunning"><span class="type">bool</span> QSingleInstanceCheck::<span class="name">isAlreadyRunning</span>() const</h3>
 <p>Returns <code translate="no">true</code> if another instance is running.</p>
 <!-- @@@isAlreadyRunning -->
-<!-- $$$notified[overload1]$$$notified -->
-<h3 class="fn" translate="no" id="notified"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notified</span>()</h3>
-<p>This signal is emitted in the main instance when a subsequent instance called its <a href="qsingleinstancecheck.html#notify" translate="no">notify</a>() method.</p>
+<!-- $$$notified[overload1]$$$notifiedconstint& -->
+<h3 class="fn" translate="no" id="notified"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notified</span>(const <span class="type">int</span> &amp;<i>arguments</i> = {})</h3>
+<p>This signal is emitted in the main instance when a subsequent instance called its <a href="qsingleinstancecheck.html#notify" translate="no">notify</a>() method. The <i translate="no">arguments</i> contain the strings passed by the second instance, or an empty list if <a href="qsingleinstancecheck.html#notify" translate="no">notify</a>() was called without arguments.</p>
 <p><b>See also </b><a href="qsingleinstancecheck.html#notify" translate="no">notify</a>().</p>
 <!-- @@@notified -->
-<!-- $$$notify[overload1]$$$notify -->
-<h3 class="fn" translate="no" id="notify"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notify</span>()</h3>
-<p>Sends a notification to the original instance. If this is the original instance, it's a no-op.</p>
+<!-- $$$notify[overload1]$$$notifyconstint& -->
+<h3 class="fn" translate="no" id="notify"><span class="type">void</span> QSingleInstanceCheck::<span class="name">notify</span>(const <span class="type">int</span> &amp;<i>arguments</i> = {})</h3>
+<p>Sends a notification to the original instance, optionally with a list of <i translate="no">arguments</i>. If this is the original instance, it's a no-op.</p>
 <p><b>See also </b><a href="qsingleinstancecheck.html#notified" translate="no">notified</a>().</p>
 <!-- @@@notify -->
 </div>
