@@ -76,7 +76,9 @@ public:
     {
         connect(&server, &QLocalServer::newConnection, this, [this]() {
             QLocalSocket* client = server.nextPendingConnection();
-            if (!client) return;
+            if (!client) {
+                return;
+            }
 
             // Buffer incoming data until the client disconnects.
             auto buffer = new QByteArray();
